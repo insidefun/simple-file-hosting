@@ -39,10 +39,9 @@
                            "Status: " + xhr.status + "\n" +
                            "StatusText: " + xhr.statusText + "\n" +
                            "Response: " + (xhr.responseText || "No response") + "\n" +
+                           "User-Agent: " + navigator.userAgent + "\n" +
                            "ReadyState: " + xhr.readyState;
         };
-
-        statusText.innerText += "\nUser-Agent: " + navigator.userAgent;
 
         xhr.withCredentials = true;
         xhr.setRequestHeader("Accept", "*/*");
