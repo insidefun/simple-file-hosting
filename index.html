@@ -28,18 +28,23 @@
 
         xhr.setRequestHeader("Accept", "*/*");
 
-        try {
-            xhr.send(formData);
-        } catch (e) {
-            statusText.innerText = "XHR Send Error: " + e.message;
-            return;
-        }
-
         xhr.onload = function () {
             if (xhr.status === 200) {
                 statusText.innerText = "Success!";
             } else {
                 statusText.innerText = "Error: " + xhr.status + " " + xhr.responseText;
+            }
+        };
+
+        statusText.innerText = "Preparing request...";
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    statusText.innerText = "Success!";
+                } else {
+                    statusText.innerText = "XHR Error: " + xhr.status + " " + xhr.statusText;
+                }
             }
         };
 
@@ -52,7 +57,12 @@
                            "ReadyState: " + xhr.readyState;
         };
 
-        statusText.innerText = "Sending...";
+        try {
+            xhr.send(formData);
+            statusText.innerText = "Request sent...";
+        } catch (e) {
+            statusText.innerText = "XHR Send Error: " + e.message;
+        }
     }
 </script>
 </body>
