@@ -14,6 +14,8 @@
         var fileInput = document.getElementById("upload");
         var statusText = document.getElementById("status");
 
+        statusText.innerText += "\nUser-Agent: " + navigator.userAgent;
+
         if (!fileInput.files.length) {
             statusText.innerText = "Choose the file!";
             return;
@@ -35,13 +37,15 @@
         };
 
         xhr.onerror = function () {
-            statusText.innerText = "Network error.\n" +
+             statusText.innerText = "Network error.\n" +
                            "Status: " + xhr.status + "\n" +
                            "StatusText: " + xhr.statusText + "\n" +
-                           "Response: " + (xhr.responseText || "No response");
+                           "Response: " + (xhr.responseText || "No response") + "\n" +
+                           "ReadyState: " + xhr.readyState;
         };
 
         xhr.withCredentials = true;
+        xhr.setRequestHeader("Accept", "*/*");
         xhr.send(formData);
         statusText.innerText = "Sending...";
     }
