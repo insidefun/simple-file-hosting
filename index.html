@@ -26,6 +26,15 @@
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
 
+        xhr.setRequestHeader("Accept", "*/*");
+
+        try {
+            xhr.send(formData);
+        } catch (e) {
+            statusText.innerText = "XHR Send Error: " + e.message;
+            return;
+        }
+
         xhr.onload = function () {
             if (xhr.status === 200) {
                 statusText.innerText = "Success!";
@@ -43,9 +52,6 @@
                            "ReadyState: " + xhr.readyState;
         };
 
-        xhr.withCredentials = true;
-        xhr.setRequestHeader("Accept", "*/*");
-        xhr.send(formData);
         statusText.innerText = "Sending...";
     }
 </script>
