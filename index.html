@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dear Photos</title>
+<title>File uploading</title>
 <body>
 <h1>File uploading</h1>
 <input type="file" id="upload">
@@ -15,7 +15,7 @@
         var statusText = document.getElementById("status");
 
         if (!fileInput.files.length) {
-            statusText.innerText = "Choose a file!";
+            statusText.innerText = "Choose the file!";
             return;
         }
 
@@ -30,14 +30,15 @@
             if (xhr.status === 200) {
                 statusText.innerText = "Success!";
             } else {
-                statusText.innerText = "Error";
+                statusText.innerText = "Error.";
             }
         };
 
         xhr.onerror = function () {
-            statusText.innerText = "Network error";
+            statusText.innerText = "Network error.";
         };
 
+        xhr.withCredentials = true;
         xhr.send(formData);
         statusText.innerText = "Sending...";
     }
