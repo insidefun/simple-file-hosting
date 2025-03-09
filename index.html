@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dear Photos</title>
 <body>
-<h2>Upload a File</h2>
-<input type="file" id="fileInput">
-<button onclick="uploadFile()">Upload</button>
+<h1>File uploading</h1>
+<input type="file" id="upload">
+<button onclick="sendFile()">Upload</button>
 <p id="status"></p>
 
 <script>
-    function uploadFile() {
-        const fileInput = document.getElementById('fileInput');
-        const file = fileInput.files[0];
-        if (!file) {
-            alert('Please select a file!');
+    function sendFile() {
+        var fileInput = document.getElementById("upload");
+        var statusText = document.getElementById("status");
+
+        if (!fileInput.files.length) {
+            statusText.innerText = "Choose a file!";
             return;
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append("file", file);
 
-        fetch('https://quick-dragonfly-85.deno.dev/upload', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('status').innerText = data.message;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('status').innerText = 'Upload failed';
-        });
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                statusText.innerText = "Success!";
+            } else {
+                statusText.innerText = "Error";
+            }
+        };
+
+        xhr.onerror = function () {
+            statusText.innerText = "Network error";
+        };
+
+        xhr.send(formData);
+        statusText.innerText = "Sending...";
     }
 </script>
 </body>
