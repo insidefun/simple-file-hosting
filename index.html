@@ -14,8 +14,6 @@
         var fileInput = document.getElementById("upload");
         var statusText = document.getElementById("status");
 
-        statusText.innerText += "\nUser-Agent: " + navigator.userAgent;
-
         if (!fileInput.files.length) {
             statusText.innerText = "Choose the file!";
             return;
@@ -43,6 +41,8 @@
                            "Response: " + (xhr.responseText || "No response") + "\n" +
                            "ReadyState: " + xhr.readyState;
         };
+
+        statusText.innerText += "\nUser-Agent: " + navigator.userAgent;
 
         xhr.withCredentials = true;
         xhr.setRequestHeader("Accept", "*/*");
