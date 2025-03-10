@@ -9,12 +9,32 @@
     <h1>File Upload</h1>
     
     <input type="file" id="fileInput">
-    <button id="uploadButton">Upload</button>
+    <button onclick="upload()">Upload</button>
+    <button onclick="testRequest()">Test</button>
 
     <p id="status"></p>
 
     <script>
-document.getElementById("uploadButton").onclick = function () {
+function testRequest() {
+    var statusText = document.getElementById("status");
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://quick-dragonfly-85.deno.dev/test", true);
+
+    xhr.onload = function () {
+        statusText.innerText = "Success: " + xhr.status + " " + xhr.responseText;
+    };
+
+    xhr.onerror = function () {
+        statusText.innerText = "Network error!";
+    };
+
+    xhr.send();
+    statusText.innerText = "Request sent...";
+}
+</script>
+
+    <script>
+function upload() {
     var fileInput = document.getElementById("fileInput");
     var statusText = document.getElementById("status");
 
