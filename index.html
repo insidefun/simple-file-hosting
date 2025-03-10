@@ -8,21 +8,18 @@
 <body>
     <h1>File Upload</h1>
     
-    <form id="uploadForm" action="https://quick-dragonfly-85.deno.dev/upload" method="post" enctype="multipart/form-data" onsubmit="alert('Form submitted!');">
-        <input type="file" id="fileInput" name="file">
-        <button type="submit">Upload</button>
-    </form>
+    <input type="file" id="fileInput">
+    <button onclick="sendFile()">Upload</button>
 
     <p id="status"></p>
 
     <script>
-        document.getElementById("uploadForm").onsubmit = function(event) {
+        function sendFile() {
             let fileInput = document.getElementById("fileInput");
             let statusText = document.getElementById("status");
 
             if (!fileInput.files.length) {
                 alert("Choose a file!");
-                event.preventDefault();
                 return;
             }
 
@@ -49,8 +46,7 @@
             };
 
             xhr.send(formData);
-            event.preventDefault();
-        };
+        }
     </script>
 </body>
 </html>
