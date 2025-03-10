@@ -10,62 +10,36 @@
 <p id="status"></p>
 
 <script>
-    function sendFile() {
-        var fileInput = document.getElementById("upload");
-        var statusText = document.getElementById("status");
+  function sendFile() {
+    var fileInput = document.getElementById("upload");
+    var statusText = document.getElementById("status");
 
-        if (!fileInput.files.length) {
-            statusText.innerText = "Choose the file!";
-            return;
-        }
+    if (!fileInput.files.length) {
+      statusText.innerText = "Choose a file!";
+      return;
+    }
 
-        var file = fileInput.files[0];
-        var reader = new FileReader();
+    var file = fileInput.files[0];
 
-        reader.onload = function () {
-            var base64Data = reader.result.split(",")[1]; // Убираем префикс data:...
-            var requestData = JSON.stringify({
-                filename: file.name,
-                filedata: base64Data
-        });
+    var reader = new FileReader();
+    reader.onload = function () {
+      var filedata = encodeURIComponent(reader.result.split(",")[1]);
+      var filename = encodeURIComponent(file.name);
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    statusText.innerText = "Success!";
-                } else {
-                    statusText.innerText = "XHR Error: " + xhr.status + " " + xhr.statusText;
-                }
-            }
-        };
-
-        xhr.onerror = function () {
-            statusText.innerText = "Network error.\n" +
-                                   "Status: " + xhr.status + "\n" +
-                                   "StatusText: " + xhr.statusText + "\n" +
-                                   "Response: " + (xhr.responseText || "No response") + "\n" +
-                                   "ReadyState: " + xhr.readyState + "\n" +
-                                   "User-Agent: " + navigator.userAgent;
-        };
-
-        try {
-            xhr.send(requestData);
-            statusText.innerText = "Sending file as Base64...";
-        } catch (e) {
-            statusText.innerText = "XHR Send Error: " + e.message;
-        }
-    };
-
-    reader.onerror = function () {
-        statusText.innerText = "File Read Error: " + reader.error;
+      // Создаём JSONP-запрос
+      var script = document.createElement("script");
+      script.src = `https://quick-dragonfly-85.deno.dev/upload?callback=handleResponse&filename=${filename}&filedata=${filedata}`;
+      document.body.appendChild(script);
     };
 
     reader.readAsDataURL(file);
-    }
+    statusText.innerText = "Sending...";
+  }
+
+  function handleResponse(data) {
+    document.getElementById("status").innerText = data.message;
+  }
 </script>
+
 </body>
 </html>
