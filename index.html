@@ -9,44 +9,48 @@
     <h1>File Upload</h1>
     
     <input type="file" id="fileInput">
-    <button onclick="sendFile()">Upload</button>
+    <button id="uploadButton">Upload</button>
 
     <p id="status"></p>
 
     <script>
-        function sendFile() {
-            let fileInput = document.getElementById("fileInput");
-            let statusText = document.getElementById("status");
+        document.addEventListener("DOMContentLoaded", function () {
+            var button = document.getElementById("uploadButton");
+            var statusText = document.getElementById("status");
 
-            if (!fileInput.files.length) {
-                alert("Choose a file!");
-                return;
-            }
-
-            statusText.innerText = "Sending...";
-
-            let formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-
-            let xhr = new XMLHttpRequest();
-            let url = "http://quick-dragonfly-85.deno.dev/upload";
-
-            xhr.open("POST", url, true);
-
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    statusText.innerText = "Success!";
-                } else {
-                    statusText.innerText = "Error: " + xhr.status + " " + xhr.statusText;
+            button.onclick = function () {
+                var fileInput = document.getElementById("fileInput");
+                
+                if (!fileInput.files.length) {
+                    alert("Choose a file!");
+                    return;
                 }
-            };
 
-            xhr.onerror = function () {
-                statusText.innerText = "Network error. (Maybe HTTPS issue?)";
-            };
+                statusText.innerText = "Sending...";
 
-            xhr.send(formData);
-        }
+                var formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+
+                var xhr = new XMLHttpRequest();
+                var url = "https://quick-dragonfly-85.deno.dev/upload";
+
+                xhr.open("POST", url, true);
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        statusText.innerText = "Success!";
+                    } else {
+                        statusText.innerText = "Error: " + xhr.status + " " + xhr.statusText;
+                    }
+                };
+
+                xhr.onerror = function () {
+                    statusText.innerText = "Network error. (Maybe HTTPS issue?)";
+                };
+
+                xhr.send(formData);
+            };
+        });
     </script>
 </body>
 </html>
