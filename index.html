@@ -20,23 +20,18 @@
         }
 
         var file = fileInput.files[0];
-        var formData = new FormData();
-        formData.append("file", file);
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var base64Data = reader.result.split(",")[1]; // Убираем префикс data:...
+            var requestData = JSON.stringify({
+                filename: file.name,
+                filedata: base64Data
+        });
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
-
-        xhr.setRequestHeader("Accept", "*/*");
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                statusText.innerText = "Success!";
-            } else {
-                statusText.innerText = "Error: " + xhr.status + " " + xhr.responseText;
-            }
-        };
-
-        statusText.innerText = "Preparing request...";
+        xhr.setRequestHeader("Content-Type", "application/json");
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
@@ -49,20 +44,27 @@
         };
 
         xhr.onerror = function () {
-             statusText.innerText = "Network error.\n" +
-                           "Status: " + xhr.status + "\n" +
-                           "StatusText: " + xhr.statusText + "\n" +
-                           "Response: " + (xhr.responseText || "No response") + "\n" +
-                           "User-Agent: " + navigator.userAgent + "\n" +
-                           "ReadyState: " + xhr.readyState;
+            statusText.innerText = "Network error.\n" +
+                                   "Status: " + xhr.status + "\n" +
+                                   "StatusText: " + xhr.statusText + "\n" +
+                                   "Response: " + (xhr.responseText || "No response") + "\n" +
+                                   "ReadyState: " + xhr.readyState + "\n" +
+                                   "User-Agent: " + navigator.userAgent;
         };
 
         try {
-            xhr.send(formData);
-            statusText.innerText = "Request sent...";
+            xhr.send(requestData);
+            statusText.innerText = "Sending file as Base64...";
         } catch (e) {
             statusText.innerText = "XHR Send Error: " + e.message;
         }
+    };
+
+    reader.onerror = function () {
+        statusText.innerText = "File Read Error: " + reader.error;
+    };
+
+    reader.readAsDataURL(file);
     }
 </script>
 </body>
