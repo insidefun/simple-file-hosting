@@ -14,33 +14,34 @@
     <p id="status"></p>
 
     <script>
-  function sendFile() {
-      var fileInput = document.getElementById("upload");
-      var statusText = document.getElementById("status");
+document.getElementById("uploadButton").onclick = function () {
+    var fileInput = document.getElementById("fileInput");
+    var statusText = document.getElementById("status");
 
-      if (!fileInput.files.length) {
-          statusText.innerText = "Choose the file!";
-          return;
-      }
+    if (!fileInput.files.length) {
+        statusText.innerText = "Choose a file!";
+        return;
+    }
 
-      var file = fileInput.files[0];
-      var formData = new FormData();
-      formData.append("file", file);
+    var file = fileInput.files[0];
+    var formData = new FormData();
+    formData.append("file", file);
 
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
 
-      xhr.onload = function () {
-          statusText.innerText = "Status: " + xhr.status + " " + xhr.statusText + "\nResponse: " + xhr.responseText;
-      };
+    xhr.onload = function () {
+        statusText.innerText = "Status: " + xhr.status + " " + xhr.statusText + "\nResponse: " + xhr.responseText;
+    };
 
-      xhr.onerror = function () {
-          statusText.innerText = "Network error. Status: " + xhr.status + " " + xhr.statusText;
-      };
+    xhr.onerror = function () {
+        statusText.innerText = "Network error. Status: " + xhr.status;
+    };
 
-      xhr.send(formData);
-      statusText.innerText = "Sending...";
-  }
+    xhr.send(formData);
+    statusText.innerText = "Sending...";
+};
 </script>
+
 </body>
 </html>
