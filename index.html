@@ -6,24 +6,51 @@
     <title>File Upload</title>
 </head>
 <body>
-    <h1>Upload File</h1>
+    <h1>File Upload</h1>
     
-    <form id="uploadForm" action="https://quick-dragonfly-85.deno.dev/upload" method="post" enctype="multipart/form-data" target="hiddenFrame">
-        <input type="file" name="file" id="upload">
+    <form id="uploadForm" action="https://quick-dragonfly-85.deno.dev/upload" method="post" enctype="multipart/form-data" onsubmit="alert('Form submitted!');">
+        <input type="file" id="fileInput" name="file">
         <button type="submit">Upload</button>
     </form>
 
-    <iframe name="hiddenFrame" style="display: none;"></iframe>
     <p id="status"></p>
 
     <script>
-        document.getElementById("uploadForm").onsubmit = function () {
-            document.getElementById("status").innerText = "Sending...";
-        };
+        document.getElementById("uploadForm").onsubmit = function(event) {
+            let fileInput = document.getElementById("fileInput");
+            let statusText = document.getElementById("status");
 
-        function handleResponse(message) {
-            document.getElementById("status").innerText = message;
-        }
+            if (!fileInput.files.length) {
+                alert("Choose a file!");
+                event.preventDefault();
+                return;
+            }
+
+            statusText.innerText = "Sending...";
+
+            let formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            let xhr = new XMLHttpRequest();
+            let url = "https://quick-dragonfly-85.deno.dev/upload";
+
+            xhr.open("POST", url, true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    statusText.innerText = "Success!";
+                } else {
+                    statusText.innerText = "Error: " + xhr.status + " " + xhr.statusText;
+                }
+            };
+
+            xhr.onerror = function () {
+                statusText.innerText = "Network error. (Maybe HTTPS issue?)";
+            };
+
+            xhr.send(formData);
+            event.preventDefault();
+        };
     </script>
 </body>
 </html>
