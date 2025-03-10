@@ -1,45 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dear Photos</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
 <body>
-<h1>Dear Photos</h1>
-<input type="file" id="upload">
-<button onclick="sendFile()">Upload</button>
-<p id="status"></p>
+    <h1>Upload File</h1>
+    
+    <form id="uploadForm" action="https://quick-dragonfly-85.deno.dev/upload" method="post" enctype="multipart/form-data" target="hiddenFrame">
+        <input type="file" name="file" id="upload">
+        <button type="submit">Upload</button>
+    </form>
 
-<script>
-  function sendFile() {
-    var fileInput = document.getElementById("upload");
-    var statusText = document.getElementById("status");
+    <iframe name="hiddenFrame" style="display: none;"></iframe>
+    <p id="status"></p>
 
-    if (!fileInput.files.length) {
-      statusText.innerText = "Choose a file!";
-      return;
-    }
+    <script>
+        document.getElementById("uploadForm").onsubmit = function () {
+            document.getElementById("status").innerText = "Sending...";
+        };
 
-    var file = fileInput.files[0];
-
-    var reader = new FileReader();
-    reader.onload = function () {
-      var filedata = encodeURIComponent(reader.result.split(",")[1]);
-      var filename = encodeURIComponent(file.name);
-
-      // Создаём JSONP-запрос
-      var script = document.createElement("script");
-      script.src = `https://quick-dragonfly-85.deno.dev/upload?callback=handleResponse&filename=${filename}&filedata=${filedata}`;
-      document.body.appendChild(script);
-    };
-
-    reader.readAsDataURL(file);
-    statusText.innerText = "Sending...";
-  }
-
-  function handleResponse(data) {
-    document.getElementById("status").innerText = data.message;
-  }
-</script>
-
+        function handleResponse(message) {
+            document.getElementById("status").innerText = message;
+        }
+    </script>
 </body>
 </html>
