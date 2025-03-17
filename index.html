@@ -37,6 +37,7 @@
             border-radius: 10px;
             cursor: pointer;
             text-align: center;
+            width: 90%;
             background: #ffe0e6;
         }
         button {
@@ -71,7 +72,7 @@
 <body>
     <div class="upload-container">
         <h1>Upload Your File ✨</h1>
-        <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+        <input type="file" id="fileInput" accept="*/*" onchange="previewImage(event)">
         <img id="preview" alt="Image Preview">
         <button onclick="upload()">Upload</button>
         <p id="status"></p>
