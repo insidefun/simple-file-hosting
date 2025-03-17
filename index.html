@@ -19,7 +19,7 @@ function testRequest() {
     var statusText = document.getElementById("status");
     var xhr = new XMLHttpRequest();
     // xhr.open("GET", "https://quick-dragonfly-85.deno.dev/test", true);
-    xhr.open("GET", "https://test.eugene-dedkovsky-ca.workers.dev", true);
+    xhr.open("GET", "https://test.eugene-dedkovsky-ca.workers.dev/test", true);
 
     xhr.onload = function () {
         statusText.innerText = "Success: " + xhr.status + " " + xhr.responseText;
@@ -49,7 +49,7 @@ function upload() {
     formData.append("file", file);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://quick-dragonfly-85.deno.dev/upload", true);
+    xhr.open("POST", "https://test.eugene-dedkovsky-ca.workers.dev/upload", true);
 
     xhr.onload = function () {
         statusText.innerText = "Status: " + xhr.status + " " + xhr.statusText + "\nResponse: " + xhr.responseText;
