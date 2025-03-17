@@ -18,7 +18,8 @@
 function testRequest() {
     var statusText = document.getElementById("status");
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://quick-dragonfly-85.deno.dev/test", true);
+    // xhr.open("GET", "https://quick-dragonfly-85.deno.dev/test", true);
+    xhr.open("GET", "https://test.eugene-dedkovsky-ca.workers.dev", true);
 
     xhr.onload = function () {
         statusText.innerText = "Success: " + xhr.status + " " + xhr.responseText;
