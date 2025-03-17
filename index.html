@@ -3,66 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
+    <title>Glamorous File Upload</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .upload-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        h1 {
+            color: #ff4081;
+        }
+        input[type="file"] {
+            display: block;
+            margin: 20px auto;
+        }
+        button {
+            background: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #e91e63;
+        }
+        p {
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h1>File Upload</h1>
+    <div class="upload-container">
+        <h1>Upload Your Photo ✨</h1>
+        <input type="file" id="fileInput">
+        <button onclick="upload()">Upload</button>
+        <p id="status"></p>
+    </div>
     
-    <input type="file" id="fileInput">
-    <button onclick="upload()">Upload</button>
-    <button onclick="testRequest()">Test</button>
-
-    <p id="status"></p>
-
     <script>
-function testRequest() {
-    var statusText = document.getElementById("status");
-    var xhr = new XMLHttpRequest();
-    // xhr.open("GET", "https://quick-dragonfly-85.deno.dev/test", true);
-    xhr.open("GET", "https://test.eugene-dedkovsky-ca.workers.dev/test", true);
-
-    xhr.onload = function () {
-        statusText.innerText = "Success: " + xhr.status + " " + xhr.responseText;
+    function upload() {
+        var fileInput = document.getElementById("fileInput");
+        var statusText = document.getElementById("status");
+    
+        if (!fileInput.files.length) {
+            statusText.innerText = "💖 Choose a file first!";
+            return;
+        }
+    
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append("file", file);
+    
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://test.eugene-dedkovsky-ca.workers.dev/upload", true);
+    
+        xhr.onload = function () {
+            statusText.innerText = "✅ Status: " + xhr.status + " " + xhr.statusText + "\nResponse: " + xhr.responseText;
+        };
+    
+        xhr.onerror = function () {
+            statusText.innerText = "❌ Network error. Status: " + xhr.status;
+        };
+    
+        xhr.send(formData);
+        statusText.innerText = "⏳ Sending...";
     };
-
-    xhr.onerror = function () {
-        statusText.innerText = "Network error!";
-    };
-
-    xhr.send();
-    statusText.innerText = "Request sent...";
-}
-</script>
-
-    <script>
-function upload() {
-    var fileInput = document.getElementById("fileInput");
-    var statusText = document.getElementById("status");
-
-    if (!fileInput.files.length) {
-        statusText.innerText = "Choose a file!";
-        return;
-    }
-
-    var file = fileInput.files[0];
-    var formData = new FormData();
-    formData.append("file", file);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://test.eugene-dedkovsky-ca.workers.dev/upload", true);
-
-    xhr.onload = function () {
-        statusText.innerText = "Status: " + xhr.status + " " + xhr.statusText + "\nResponse: " + xhr.responseText;
-    };
-
-    xhr.onerror = function () {
-        statusText.innerText = "Network error. Status: " + xhr.status;
-    };
-
-    xhr.send(formData);
-    statusText.innerText = "Sending...";
-};
-</script>
-
+    </script>
 </body>
 </html>
