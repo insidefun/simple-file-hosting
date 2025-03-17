@@ -72,7 +72,7 @@
 <body>
     <div class="upload-container">
         <h1>Upload Your File ✨</h1>
-        <input type="file" id="fileInput" accept="*/*" onchange="previewImage(event)">
+        <input type="file" id="fileInput" accept="*/*" onchange="previewImage(event)" multiple>
         <img id="preview" alt="Image Preview">
         <button onclick="upload()">Upload</button>
         <p id="status"></p>
@@ -100,24 +100,27 @@
             statusText.innerText = "💖 Choose a file first!";
             return;
         }
-    
-        var file = fileInput.files[0];
+
         var formData = new FormData();
+        // for (var i = 0; i < fileInput.files.length; i++) {
+        //     formData.append("files[]", fileInput.files[i]);
+        // }
+        var file = fileInput.files[0];
         formData.append("file", file);
     
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "https://test.eugene-dedkovsky-ca.workers.dev/upload", true);
-
-        xhr.onerror = function () {
-            statusText.innerText = "❌ Network error. Status: " + xhr.status;
-        };
         
         xhr.onload = function () {
             if (xhr.status >= 200 && xhr.status < 300) {
-                statusText.innerText = "✅ Upload successful!;
+                statusText.innerText = "✅ Upload successful!";
             } else {
                 statusText.innerText = "⚠️ Upload failed. Status: " + xhr.status + " " + xhr.statusText;
             }
+        };
+
+        xhr.onerror = function () {
+            statusText.innerText = "❌ Network error. Status: " + xhr.status;
         };
     
         xhr.send(formData);
