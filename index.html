@@ -72,7 +72,7 @@
 <body>
     <div class="upload-container">
         <h1>Upload Your File ✨</h1>
-        <input type="file" id="fileInput" accept="*/*" onchange="previewImage(event)">
+        <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
         <img id="preview" alt="Image Preview">
         <button onclick="upload()">Upload</button>
         <p id="status"></p>
@@ -102,9 +102,6 @@
         }
 
         var formData = new FormData();
-        // for (var i = 0; i < fileInput.files.length; i++) {
-        //     formData.append("files[]", fileInput.files[i]);
-        // }
         var file = fileInput.files[0];
         formData.append("file", file);
     
