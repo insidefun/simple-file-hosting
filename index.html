@@ -94,14 +94,15 @@
 
         const reader = new FileReader();
         reader.onload = function (e) {
-        if (fileType.startsWith("image/")) {
-            imgPreview.src = e.target.result;
-            imgPreview.style.display = "block";
-        } else if (fileType.startsWith("video/")) {
-            videoPreview.src = e.target.result;
-            videoPreview.style.display = "block";
-        }
-    };
+            if (fileType.startsWith("image/")) {
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = "block";
+            } else if (fileType.startsWith("video/")) {
+                videoPreview.src = e.target.result;
+                videoPreview.style.display = "block";
+            }
+        };
+    }
     
     function upload() {
         var fileInput = document.getElementById("fileInput");
