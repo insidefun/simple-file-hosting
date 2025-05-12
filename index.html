@@ -72,25 +72,36 @@
 <body>
     <div class="upload-container">
         <h1>Upload Your File ✨</h1>
-        <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+        <input type="file" id="fileInput" accept="image/*,video/*" onchange="previewImage(event)">
         <img id="preview" alt="Image Preview">
+        <video id="videoPreview" controls style="display:none; width:100%; max-height:200px; border-radius:10px; object-fit:cover;"></video>
         <button onclick="upload()">Upload</button>
         <p id="status"></p>
     </div>
     
     <script>
     function previewImage(event) {
-        var preview = document.getElementById("preview");
-        var file = event.target.files[0];
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(file);
+        const file = event.target.files[0];
+        const imgPreview = document.getElementById("preview");
+        const videoPreview = document.getElementById("videoPreview");
+
+        imgPreview.style.display = "none";
+        videoPreview.style.display = "none";
+
+        if (!file) return;
+
+        const fileType = file.type;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+        if (fileType.startsWith("image/")) {
+            imgPreview.src = e.target.result;
+            imgPreview.style.display = "block";
+        } else if (fileType.startsWith("video/")) {
+            videoPreview.src = e.target.result;
+            videoPreview.style.display = "block";
         }
-    }
+    };
     
     function upload() {
         var fileInput = document.getElementById("fileInput");
